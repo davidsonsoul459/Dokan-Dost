@@ -1,0 +1,325 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Dukaan Dost - Simple product catalog and WhatsApp ordering for your business.">
+  <title>Dukaan Dost | Online Store</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5faf6;
+      color: #183322;
+      line-height: 1.5;
+    }
+
+    header {
+      background: #137a3b;
+      color: white;
+      padding: 20px 16px;
+      text-align: center;
+    }
+
+    .logo {
+      font-size: 27px;
+      font-weight: bold;
+    }
+
+    header p {
+      font-size: 14px;
+      margin-top: 5px;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 30px 16px 20px;
+    }
+
+    .hero h1 {
+      font-size: 27px;
+      margin-bottom: 8px;
+    }
+
+    .hero p {
+      color: #587061;
+      font-size: 15px;
+    }
+
+    .shop-info {
+      max-width: 600px;
+      margin: 0 auto 18px;
+      padding: 12px;
+      background: white;
+      border: 1px solid #dceade;
+      border-radius: 12px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      max-width: 900px;
+      padding: 0 14px 30px;
+      margin: auto;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid #e0eae2;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 3px 12px #173d2510;
+    }
+
+    .product-image {
+      min-height: 120px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #e5f5e8;
+      font-size: 58px;
+    }
+
+    .card-content {
+      padding: 12px;
+    }
+
+    .card h2 {
+      font-size: 16px;
+      margin-bottom: 5px;
+    }
+
+    .description {
+      color: #647568;
+      font-size: 12px;
+      min-height: 36px;
+    }
+
+    .price {
+      color: #137a3b;
+      font-size: 19px;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+
+    .quantity-label {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 5px;
+    }
+
+    .quantity {
+      width: 100%;
+      padding: 9px;
+      border: 1px solid #cbd9ce;
+      border-radius: 8px;
+      font-size: 16px;
+      margin-bottom: 10px;
+      background: white;
+    }
+
+    .order-btn {
+      display: block;
+      width: 100%;
+      border: none;
+      border-radius: 9px;
+      background: #16803d;
+      color: white;
+      padding: 11px 6px;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .order-btn:active {
+      background: #0d5e2b;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 20px 12px;
+      background: #e5f5e8;
+      font-size: 13px;
+      color: #345b40;
+    }
+
+    @media (min-width: 650px) {
+      .products {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .product-image {
+        min-height: 170px;
+      }
+
+      .card-content {
+        padding: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="logo">🌿 Dukaan Dost</div>
+    <p>Aapki online dukaan, ab aur asaan!</p>
+  </header>
+
+  <section class="hero">
+    <h1>Hamari Products</h1>
+    <p>Pasand karein, quantity chunein aur WhatsApp par order karein.</p>
+  </section>
+
+  <div class="shop-info">
+    <strong>Welcome to Dukaan Dost!</strong>
+    <p>Demo store | Prices Pakistani Rupees (PKR) mein hain.</p>
+  </div>
+
+  <main id="products" class="products"></main>
+
+  <footer class="footer">
+    <p>© <span id="year"></span> Dukaan Dost</p>
+    <p>Simple shopping. Direct WhatsApp orders.</p>
+  </footer>
+
+  <script>
+    // APNA WHATSAPP NUMBER YAHAN LIKHEIN.
+    // Pakistan example format: 923001234567
+    // +, spaces aur dashes istemal na karein.
+    const WHATSAPP_NUMBER = "923001234567";
+
+    // Demo products. Apni products aur prices yahan badlein.
+    const products = [
+      {
+        id: 1,
+        name: "Mini Hand Fan",
+        description: "Portable fan for daily use.",
+        price: 1200,
+        emoji: "🪭"
+      },
+      {
+        id: 2,
+        name: "Wireless Earbuds",
+        description: "Compact earbuds for music.",
+        price: 1800,
+        emoji: "🎧"
+      },
+      {
+        id: 3,
+        name: "Power Bank",
+        description: "Portable charging on the go.",
+        price: 2500,
+        emoji: "🔋"
+      },
+      {
+        id: 4,
+        name: "Smart Watch",
+        description: "A stylish everyday accessory.",
+        price: 3200,
+        emoji: "⌚"
+      }
+    ];
+
+    const productsContainer =
+      document.getElementById("products");
+
+    function renderProducts() {
+      productsContainer.innerHTML = products.map(product => `
+        <article class="card">
+          <div class="product-image" role="img"
+               aria-label="${product.name}">
+            ${product.emoji}
+          </div>
+
+          <div class="card-content">
+            <h2>${product.name}</h2>
+            <p class="description">
+              ${product.description}
+            </p>
+
+            <p class="price">
+              Rs ${product.price.toLocaleString("en-PK")}
+            </p>
+
+            <label class="quantity-label"
+                   for="qty-${product.id}">
+              Quantity
+            </label>
+
+            <input
+              class="quantity"
+              type="number"
+              id="qty-${product.id}"
+              min="1"
+              max="99"
+              step="1"
+              value="1"
+              inputmode="numeric"
+            >
+
+            <button
+              class="order-btn"
+              type="button"
+              onclick="orderProduct(${product.id})">
+              Order on WhatsApp
+            </button>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function orderProduct(id) {
+      const product = products.find(item => item.id === id);
+      const quantityInput =
+        document.getElementById("qty-" + id);
+
+      const quantity = Number(quantityInput.value);
+
+      if (!Number.isInteger(quantity) ||
+          quantity < 1 || quantity > 99) {
+        alert("Please quantity 1 se 99 tak select karein.");
+        return;
+      }
+
+      if (!/^\d{10,15}$/.test(WHATSAPP_NUMBER) ||
+          WHATSAPP_NUMBER === "923001234567") {
+        alert(
+          "Website owner: code mein apna WhatsApp number set karein."
+        );
+        return;
+      }
+
+      const total = product.price * quantity;
+
+      const message =
+        "Assalam-o-Alaikum! Main order karna chahta/chahti hoon.\n\n" +
+        "Product: " + product.name + "\n" +
+        "Price per item: Rs " + product.price + "\n" +
+        "Quantity: " + quantity + "\n" +
+        "Subtotal: Rs " + total.toLocaleString("en-PK") + "\n\n" +
+        "Please delivery details confirm kar dein.";
+
+      const whatsappURL =923150609578
+        "https://wa.me/" + WHATSAPP_NUMBER +
+        "?text=" + encodeURIComponent(message);
+
+      window.open(whatsappURL, "_blank");
+    }
+
+    document.getElementById("year").textContent =
+      new Date().getFullYear();
+
+    renderProducts();
+  </script>
+</body>
+</html>
